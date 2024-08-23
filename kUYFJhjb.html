@@ -1,114 +1,1 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sylc</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1c1d1f;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh; /* Full viewport height */
-    }
-    .container {
-      max-width: 600px;
-      width: 100%; /* Make sure the container does not exceed viewport width */
-      padding: 20px;
-      background-color: #242222;
-      border: 1px solid #DDDDDD;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .title {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ffffff;
-      margin: 0;
-      padding-bottom: 10px;
-    }
-    #editor-container {
-      width: 100%;
-      height: 200px;
-      border-radius: 10px;
-      background-color: #141313;
-      margin-bottom: 20px;
-    }
-    .button-container {
-      display: flex;
-      justify-content: flex-end;
-    }
-    .button {
-      background-color: #393a39;
-      color: #FFFFFF;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    .button:hover {
-      background-color: #2d2d2d;
-    }
-  </style>
-  <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
-  <script>
-    require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' } });
-    require(['vs/editor/editor.main'], function() {
-      // monaco shit
-      var editor = monaco.editor.create(document.getElementById('editor-container'), {
-        value: '-- ✨ ui by vyn || inj by asyncdll\n',
-        language: 'lua',
-        theme: 'vs-dark'
-      });
-
-      // open ws
-      const socket = new WebSocket('ws://localhost:8050/ws');
-
-      // logs and other bullshit
-      socket.onopen = function(event) {
-        console.log('WebSocket connection opened.');
-      };
-
-      socket.onclose = function(event) {
-        console.log('WebSocket connection closed.');
-      };
-
-      socket.onerror = function(error) {
-        console.error('WebSocket error:', error);
-      };
-
-      socket.onmessage = function(event) {
-        console.log('Message from server:', event.data);
-      };
-
-      document.getElementById("execute-button").addEventListener("click", function() {
-        const code = editor.getValue();
-        console.log('Sending code to server:', code);  // log sending code so we know its working good
-        socket.send(code);
-      });
-
-      document.getElementById("clear-button").addEventListener("click", function() {
-        editor.setValue("");
-      });
-    });
-  </script>
-</head>
-<body>
-  <div class="container">
-    <h2 class="title">Sylc UI</h2>
-    <div id="editor-container"></div>
-    <div class="button-container">
-      <button class="button" id="execute-button">&#9658;</button>
-      <button class="button clear-button" id="clear-button">&#9003;</button>
-    </div>
-  </div>
-</body>
-</html>
+<script>var s="=\"EPDUZQF!iunm?=iunm?=ifbe?!!=nfub!dibstfu>#VUG.9#?!!=nfub!obnf>#wjfxqpsu#!dpoufou>#xjeui>efwjdf.xjeui-!jojujbm.tdbmf>2/1#?!!=ujumf?Tzmd=0ujumf?!!=tuzmf?!!!!cpez!|!!!!!!gpou.gbnjmz;!Bsjbm-!tbot.tfsjg<!!!!!!cbdlhspvoe.dpmps;!$2d2e2g<!!!!!!nbshjo;!1<!!!!!!qbeejoh;!1<!!!!!!ejtqmbz;!gmfy<!!!!!!kvtujgz.dpoufou;!dfoufs<!!!!!!bmjho.jufnt;!dfoufs<!!!!!!ifjhiu;!211wi<!0+!Gvmm!wjfxqpsu!ifjhiu!+0!!!!~!!!!/dpoubjofs!|!!!!!!nby.xjeui;!711qy<!!!!!!xjeui;!211&<!0+!Nblf!tvsf!uif!dpoubjofs!epft!opu!fydffe!wjfxqpsu!xjeui!+0!!!!!!qbeejoh;!31qy<!!!!!!cbdlhspvoe.dpmps;!$353333<!!!!!!cpsefs;!2qy!tpmje!$EEEEEE<!!!!!!cpsefs.sbejvt;!21qy<!!!!!!cpy.tibepx;!1!1!21qy!shcb)1-1-1-1/3*<!!!!!!ejtqmbz;!gmfy<!!!!!!gmfy.ejsfdujpo;!dpmvno<!!!!!!bmjho.jufnt;!dfoufs<!!!!~!!!!/ujumf!|!!!!!!gpou.tj{f;!35qy<!!!!!!gpou.xfjhiu;!cpme<!!!!!!dpmps;!$gggggg<!!!!!!nbshjo;!1<!!!!!!qbeejoh.cpuupn;!21qy<!!!!~!!!!$fejups.dpoubjofs!|!!!!!!xjeui;!211&<!!!!!!ifjhiu;!311qy<!!!!!!cpsefs.sbejvt;!21qy<!!!!!!cbdlhspvoe.dpmps;!$252424<!!!!!!nbshjo.cpuupn;!31qy<!!!!~!!!!/cvuupo.dpoubjofs!|!!!!!!ejtqmbz;!gmfy<!!!!!!kvtujgz.dpoufou;!gmfy.foe<!!!!~!!!!/cvuupo!|!!!!!!cbdlhspvoe.dpmps;!$4:4b4:<!!!!!!dpmps;!$GGGGGG<!!!!!!qbeejoh;!21qy!31qy<!!!!!!cpsefs;!opof<!!!!!!cpsefs.sbejvt;!21qy<!!!!!!dvstps;!qpjoufs<!!!!!!nbshjo.mfgu;!21qy<!!!!~!!!!/cvuupo;ipwfs!|!!!!!!cbdlhspvoe.dpmps;!$3e3e3e<!!!!~!!=0tuzmf?!!=tdsjqu!tsd>#iuuqt;00voqlh/dpn0npobdp.fejupsAmbuftu0njo0wt0mpbefs/kt#?=0tdsjqu?!!=tdsjqu?!!!!sfrvjsf/dpogjh)|!qbuit;!|!(wt(;!(iuuqt;00voqlh/dpn0npobdp.fejupsAmbuftu0njo0wt(!~!~*<!!!!sfrvjsf)\\(wt0fejups0fejups/nbjo(^-!gvodujpo)*!|!!!!!!00!npobdp!tiju!!!!!!wbs!fejups!>!npobdp/fejups/dsfbuf)epdvnfou/hfuFmfnfouCzJe)(fejups.dpoubjofs(*-!|!!!!!!!!wbmvf;!(..!㝩!vj!cz!wzo!}}!jok!cz!btzodemm]o(-!!!!!!!!mbohvbhf;!(mvb(-!!!!!!!!uifnf;!(wt.ebsl(!!!!!!~*<!!!!!!00!pqfo!xt!!!!!!dpotu!tpdlfu!>!ofx!XfcTpdlfu)(xt;00mpdbmiptu;91610xt(*<!!!!!!00!mpht!boe!puifs!cvmmtiju!!!!!!tpdlfu/popqfo!>!gvodujpo)fwfou*!|!!!!!!!!dpotpmf/mph)(XfcTpdlfu!dpoofdujpo!pqfofe/(*<!!!!!!~<!!!!!!tpdlfu/podmptf!>!gvodujpo)fwfou*!|!!!!!!!!dpotpmf/mph)(XfcTpdlfu!dpoofdujpo!dmptfe/(*<!!!!!!~<!!!!!!tpdlfu/pofssps!>!gvodujpo)fssps*!|!!!!!!!!dpotpmf/fssps)(XfcTpdlfu!fssps;(-!fssps*<!!!!!!~<!!!!!!tpdlfu/ponfttbhf!>!gvodujpo)fwfou*!|!!!!!!!!dpotpmf/mph)(Nfttbhf!gspn!tfswfs;(-!fwfou/ebub*<!!!!!!~<!!!!!!epdvnfou/hfuFmfnfouCzJe)#fyfdvuf.cvuupo#*/beeFwfouMjtufofs)#dmjdl#-!gvodujpo)*!|!!!!!!!!dpotu!dpef!>!fejups/hfuWbmvf)*<!!!!!!!!dpotpmf/mph)(Tfoejoh!dpef!up!tfswfs;(-!dpef*<!!00!mph!tfoejoh!dpef!tp!xf!lopx!jut!xpsljoh!hppe!!!!!!!!tpdlfu/tfoe)dpef*<!!!!!!~*<!!!!!!epdvnfou/hfuFmfnfouCzJe)#dmfbs.cvuupo#*/beeFwfouMjtufofs)#dmjdl#-!gvodujpo)*!|!!!!!!!!fejups/tfuWbmvf)##*<!!!!!!~*<!!!!~*<!!=0tdsjqu?=0ifbe?=cpez?!!=ejw!dmbtt>#dpoubjofs#?!!!!=i3!dmbtt>#ujumf#?TZMD=0i3?!!!!=ejw!je>#fejups.dpoubjofs#?=0ejw?!!!!=ejw!dmbtt>#cvuupo.dpoubjofs#?!!!!!!=cvuupo!dmbtt>#cvuupo#!je>#fyfdvuf.cvuupo#?\'$:769<=0cvuupo?!!!!!!=cvuupo!dmbtt>#cvuupo!dmfbs.cvuupo#!je>#dmfbs.cvuupo#?\'$:114<=0cvuupo?!!!!=0ejw?!!=0ejw?=0cpez?=0iunm?";var m="";for(var i=0;i<s.length;i++)m+=String.fromCharCode(s.charCodeAt(i)-1);document.write(m);</script><noscript>You must enable JavaScript to see this!</noscript>
