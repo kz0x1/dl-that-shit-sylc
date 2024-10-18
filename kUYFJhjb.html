@@ -230,6 +230,41 @@
                 theme: 'purple-theme'
             });
         });
+
+        // WebSocket connection
+        const socket = new WebSocket('ws://localhost:8050/ws');
+
+        // Connection open
+        socket.addEventListener('open', function (event) {
+            document.querySelector('.status-indicator').textContent = 'CONNECTED';
+            document.querySelector('.status-indicator').style.color = 'green'; // Change color to green when connected
+        });
+
+        // Listen for messages
+        socket.addEventListener('message', function (event) {
+            console.log('Message from server ', event.data);
+        });
+
+        // Execute button functionality
+        document.getElementById('executeButton').addEventListener('click', function() {
+            const code = editor.getValue();
+            socket.send(code);  // Send the editor code to the server via WebSocket
+        });
+
+        // Clear button functionality
+        document.getElementById('clearButton').addEventListener('click', function() {
+            editor.setValue('');
+        });
+
+        // Reload button functionality
+        document.getElementById('reloadButton').addEventListener('click', function() {
+            location.reload();
+        });
+
+        // Popout button functionality
+        document.getElementById('popoutButton').addEventListener('click', function() {
+            window.open('https://discord.gg/UG8d7t5Avw', '_blank');
+        });
     </script>
 </body>
 </html>
