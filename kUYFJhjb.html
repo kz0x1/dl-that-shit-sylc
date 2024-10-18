@@ -138,28 +138,41 @@
             monaco.languages.register({ id: 'roblox-lua' });
             
             // Define syntax and highlighting rules for Roblox Exploit Lua
-            monaco.languages.setMonarchTokensProvider('roblox-lua', {
-                tokenizer: {
-                    root: [
-                        [/\b(print|game|workspace|getgenv|getfenv|setfenv|hookfunction|newcclosure|firetouchinterest|firesignal|fireclickdetector)\b/, "keyword"],
-                        [/[{}()\[\]]/, '@brackets'],
-                        [/[<>](?!@symbols)/, '@brackets'],
-                        [/[@#]\w+/, 'namespace'],
-                        [/[A-Z][\w\$]*/, 'type.identifier'],
-                        [/\d+/, 'number'],
-                        [/"([^"\\]|\\.)*$/, 'string.invalid' ],  // non-teminated string
-                        [/"/,  { token: 'string.quote', bracket: '@open', next: '@string' } ],
-                        [/[;,.]/, 'delimiter'],
-                        [/\/\*/, 'comment', '@comment' ],
-                        [/[ \t\r\n]+/, 'white'],
-                    ],
-                    string: [
-                        [/[^\\"]+/,  'string'],
-                        [/\\./,      'string.escape.invalid'],
-                        [/"/,        { token: 'string.quote', bracket: '@close', next: '@pop' } ]
-                    ]
-                }
-            });
+           monaco.languages.setMonarchTokensProvider('roblox-lua', {
+    // Define the symbols to be recognized
+    symbols: /[=><!~?:&|+\-*\/\^%]+/,
+
+    tokenizer: {
+        root: [
+            [/\b(print|game|workspace|getgenv|getfenv|setfenv|hookfunction|newcclosure|firetouchinterest|firesignal|fireclickdetector)\b/, "keyword"],
+            [/[{}()\[\]]/, '@brackets'], // Recognize brackets
+            [/[<>](?!@symbols)/, '@brackets'], // Recognize angle brackets not used as symbols
+            [/@\w+/, 'namespace'],
+            [/[A-Z][\w\$]*/, 'type.identifier'], // Type names
+            [/\d+/, 'number'], // Numbers
+            [/"([^"\\]|\\.)*$/, 'string.invalid' ],  // Non-terminated string
+            [/"/,  { token: 'string.quote', bracket: '@open', next: '@string' } ],
+            [/[;,.]/, 'delimiter'], // Delimiters like commas, semicolons
+            [/\/\*/, 'comment', '@comment' ], // Comments
+            [/[ \t\r\n]+/, 'white'] // Whitespace
+        ],
+
+        // String handling
+        string: [
+            [/[^\\"]+/,  'string'],
+            [/\\./,      'string.escape.invalid'],
+            [/"/,        { token: 'string.quote', bracket: '@close', next: '@pop' } ]
+        ],
+
+        // Comment handling
+        comment: [
+            [/[^*]+/, 'comment'],
+            [/\*\//, 'comment', '@pop'],
+            [/\*/, 'comment']
+        ]
+    }
+});
+
 
             // Register autocomplete suggestions
             monaco.languages.registerCompletionItemProvider('roblox-lua', {
