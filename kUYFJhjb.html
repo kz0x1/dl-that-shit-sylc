@@ -134,10 +134,94 @@
     <script>
         require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs' }});
         require(['vs/editor/editor.main'], function() {
-            // Initialize the Monaco Editor
+            // Define Roblox Exploit Lua language
+            monaco.languages.register({ id: 'roblox-lua' });
+            
+            // Define syntax and highlighting rules for Roblox Exploit Lua
+            monaco.languages.setMonarchTokensProvider('roblox-lua', {
+                tokenizer: {
+                    root: [
+                        [/\b(print|game|workspace|getgenv|getfenv|setfenv|hookfunction|newcclosure|firetouchinterest|firesignal|fireclickdetector)\b/, "keyword"],
+                        [/[{}()\[\]]/, '@brackets'],
+                        [/[<>](?!@symbols)/, '@brackets'],
+                        [/[@#]\w+/, 'namespace'],
+                        [/[A-Z][\w\$]*/, 'type.identifier'],
+                        [/\d+/, 'number'],
+                        [/"([^"\\]|\\.)*$/, 'string.invalid' ],  // non-teminated string
+                        [/"/,  { token: 'string.quote', bracket: '@open', next: '@string' } ],
+                        [/[;,.]/, 'delimiter'],
+                        [/\/\*/, 'comment', '@comment' ],
+                        [/[ \t\r\n]+/, 'white'],
+                    ],
+                    string: [
+                        [/[^\\"]+/,  'string'],
+                        [/\\./,      'string.escape.invalid'],
+                        [/"/,        { token: 'string.quote', bracket: '@close', next: '@pop' } ]
+                    ]
+                }
+            });
+
+            // Register autocomplete suggestions
+            monaco.languages.registerCompletionItemProvider('roblox-lua', {
+                provideCompletionItems: () => {
+                    var suggestions = [
+                        {
+                            label: 'getgenv',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'getgenv()',
+                            documentation: 'Gets the global environment.'
+                        },
+                        {
+                            label: 'getfenv',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'getfenv()',
+                            documentation: 'Gets the function environment.'
+                        },
+                        {
+                            label: 'setfenv',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'setfenv(1, _ENV)',
+                            documentation: 'Sets the function environment.'
+                        },
+                        {
+                            label: 'hookfunction',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'hookfunction(original, hook)',
+                            documentation: 'Hooks a function.'
+                        },
+                        {
+                            label: 'newcclosure',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'newcclosure(function() ... end)',
+                            documentation: 'Creates a new C closure.'
+                        },
+                        {
+                            label: 'firetouchinterest',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'firetouchinterest(part, target, action)',
+                            documentation: 'Fires a touch interest event.'
+                        },
+                        {
+                            label: 'firesignal',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'firesignal(signal)',
+                            documentation: 'Fires a Roblox signal.'
+                        },
+                        {
+                            label: 'fireclickdetector',
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: 'fireclickdetector(clickdetector)',
+                            documentation: 'Fires a click detector.'
+                        }
+                    ];
+                    return { suggestions: suggestions };
+                }
+            });
+
+            // Initialize the editor
             var editor = monaco.editor.create(document.getElementById('editor'), {
                 value: "-- Welcome to the Karcus editor\n",
-                language: 'lua',
+                language: 'roblox-lua',
                 theme: 'vs-dark',
                 automaticLayout: true
             });
