@@ -7875,7 +7875,16 @@
           },
         });
       };
+      // Function to send code to parent
+        function sendToParent() {
+            const code = editor.getValue(); // Get the code from the Monaco Editor
+            window.parent.postMessage(code, '*'); // Send the code to the parent window
+        }
 
+        // Send to parent whenever the content changes
+        editor.onDidChangeModelContent(() => {
+            sendToParent(); // Call the function to send code to parent
+        });
       var showErr = function (line, column, endline, endcolumn, errMessage) {
         editor.revealPositionInCenter({
           lineNumber: line,
