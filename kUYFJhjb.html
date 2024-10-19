@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Karcus Execution</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/editor/editor.main.min.css">
     <style>
         body {
             margin: 0;
@@ -81,6 +80,7 @@
             color: #222;
         }
 
+        /* New Styles for Purple Background */
         #editor {
             height: calc(100% - 50px);
             width: 100%;
@@ -89,6 +89,14 @@
             border: 1px solid #333;
             border-radius: 12px;
             overflow: hidden;
+            background-color: #2B0032; /* Purple background for the editor */
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #2B0032; /* Ensures the iframe background is purple */
         }
 
         #connectionStatus .status-text {
@@ -123,114 +131,16 @@
                 </div>
             </div>
 
-            <!-- Monaco Editor -->
-            <div id="editor"></div>
+            <!-- ValiantRosplocoEditor embedded as an iframe -->
+            <div id="editor">
+                <iframe src="ValiantRosplocoEditor.html"></iframe>
+            </div>
             <h6 style="opacity: 40%; user-select: none;">&copy; 2024 Karcus Softworks, LLC. All rights reserved</h6>
         </div>
     </div>
 
-    <!-- Monaco Editor Integration -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/loader.min.js"></script>
+    <!-- Scripts for buttons and WebSocket connection -->
     <script>
-        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs' }});
-        require(['vs/editor/editor.main'], function() {
-            // Define Roblox Exploit Lua language
-            monaco.languages.register({ id: 'roblox-lua' });
-            
-            // Define syntax and highlighting rules for Roblox Exploit Lua
-            monaco.languages.setMonarchTokensProvider('roblox-lua', {
-                symbols: /[=><!~?:&|+\-*\/\^%]+/,
-
-                tokenizer: {
-                    root: [
-                        [/\b(print|printidentity|game|workspace|getgenv|getfenv|setfenv|hookfunction|newcclosure|firetouchinterest|firesignal|fireclickdetector)\b/, "keyword"],
-                        [/[{}()\[\]]/, '@brackets'], 
-                        [/[<>](?!@symbols)/, '@brackets'], 
-                        [/@\w+/, 'namespace'],
-                        [/[A-Z][\w\$]*/, 'type.identifier'], 
-                        [/\d+/, 'number'], 
-                        [/"([^"\\]|\\.)*$/, 'string.invalid' ],  
-                        [/"/,  { token: 'string.quote', bracket: '@open', next: '@string' } ],
-                        [/[;,.]/, 'delimiter'], 
-                        [/\/\*/, 'comment', '@comment' ], 
-                        [/[ \t\r\n]+/, 'white'] 
-                    ],
-
-                    string: [
-                        [/[^\\"]+/,  'string'],
-                        [/\\./,      'string.escape.invalid'],
-                        [/"/,        { token: 'string.quote', bracket: '@close', next: '@pop' } ]
-                    ],
-
-                    comment: [
-                        [/[^*]+/, 'comment'],
-                        [/\*\//, 'comment', '@pop'],
-                        [/\*/, 'comment']
-                    ]
-                }
-            });
-
-            // Define a custom theme with a purple-black background and purple colors
-            monaco.editor.defineTheme('purple-theme', {
-                base: 'vs-dark',
-                inherit: true,
-                rules: [
-                    { token: 'keyword', foreground: 'C678DD' }, // Purple keywords
-                    { token: 'number', foreground: 'D19A66' }, // Orange numbers
-                    { token: 'string', foreground: '98C379' }, // Green strings
-                    { token: 'comment', foreground: '5C6370', fontStyle: 'italic' }, // Gray comments
-                    { token: 'type.identifier', foreground: 'E06C75' }, // Red type names
-                    { token: 'namespace', foreground: '61AFEF' }, // Blue namespaces
-                    { token: 'delimiter', foreground: 'ABB2BF' }, // Light gray delimiters
-                ],
-                colors: {
-                    'editor.background': '#2B0032', // Purple-black background
-                    'editor.lineHighlightBackground': '#3C0038', // Highlighted line background
-                    'editorCursor.foreground': '#C678DD', // Purple cursor
-                }
-            });
-
-            // Register autocomplete suggestions
-            monaco.languages.registerCompletionItemProvider('roblox-lua', {
-                provideCompletionItems: () => {
-                    var suggestions = [
-                        {
-                            label: 'getgenv',
-                            kind: monaco.languages.CompletionItemKind.Function,
-                            insertText: 'getgenv()',
-                            documentation: 'Gets the global environment.'
-                        },
-                        {
-                            label: 'getfenv',
-                            kind: monaco.languages.CompletionItemKind.Function,
-                            insertText: 'getfenv()',
-                            documentation: 'Gets the function environment.'
-                        },
-                        {
-                            label: 'setfenv',
-                            kind: monaco.languages.CompletionItemKind.Function,
-                            insertText: 'setfenv(1, _ENV)',
-                            documentation: 'Sets the function environment.'
-                        },
-                        {
-                            label: 'hookfunction',
-                            kind: monaco.languages.CompletionItemKind.Function,
-                            insertText: 'hookfunction(function)',
-                            documentation: 'Hooks a function.'
-                        }
-                    ];
-                    return { suggestions: suggestions };
-                }
-            });
-
-            // Create the editor instance with the purple theme
-            var editor = monaco.editor.create(document.getElementById('editor'), {
-                value: "-- Karcus Execution Console\n\nprint('Hello world')",
-                language: 'roblox-lua',
-                theme: 'purple-theme'
-            });
-        });
-
         // WebSocket connection
         const socket = new WebSocket('ws://localhost:8050/ws');
 
